@@ -8,16 +8,19 @@
 
 #import "ViewController.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
+#import "HKView.h"
 
 @interface ViewController ()
 @property (nonatomic, strong) id<RACSubscriber> subscriber;
+
+@property (nonatomic, strong) HKView *hkView;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+    [self constuctHKView];
     //[self signalTestFirst];
     //[self disposableTestFirst];
     //[self signalDisposableTestSec];
@@ -25,7 +28,18 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     //[self subjectTestAlone];
-    [self subJectTestSec];
+    //[self subJectTestSec];
+}
+
+- (void)constuctHKView{
+    self.hkView = [[HKView alloc] init];
+    self.hkView.frame = CGRectMake(100, 200, 200, 200);
+    self.hkView.backgroundColor = [UIColor greenColor];
+    [self.view addSubview:self.hkView];
+    __weak typeof(self)weakself = self;
+    [self.hkView.btnClickSignal subscribeNext:^(id x) {
+        weakself.view.backgroundColor = (UIColor*)x;
+    }];
 }
 
 
