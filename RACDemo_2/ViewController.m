@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import <ReactiveCocoa/ReactiveCocoa.h>
 #import "HKView.h"
+#import "KFC.h"
 
 @interface ViewController ()
 @property (nonatomic, strong) id<RACSubscriber> subscriber;
@@ -20,15 +21,67 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self constuctHKView];
+    //[self constuctHKView];
     //[self signalTestFirst];
     //[self disposableTestFirst];
     //[self signalDisposableTestSec];
+    
+    [self RACArrayTest2];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
     //[self subjectTestAlone];
     //[self subJectTestSec];
+}
+
+- (void)RACArrayTest2{
+    NSString* fileP = [[NSBundle mainBundle] pathForResource:@"kfc.plist" ofType:@""];
+    NSArray* dictArr = [NSArray arrayWithContentsOfFile:fileP];
+   
+    [dictArr.rac_sequence.signal subscribeNext:^(id x) {
+        //NSLog(@"%@",x);
+    }];
+    
+    [dictArr.rac_sequence.signal subscribeNext:^(id x) {
+        
+    }];
+    
+    // 数组类 遍历  默认在子线程遍历
+    [dictArr.rac_sequence.signal subscribeNext:^(id x) {
+        //NSLog(@"%@ , x is = %@",[NSThread currentThread],x);
+    } error:^(NSError *error) {
+        
+    } completed:^{
+        
+    }];
+    
+    
+    [dictArr.rac_sequence.signal subscribeNext:^(id x) {
+        NSDictionary* dic = (NSDictionary*)x;
+        [dic.rac_sequence.signal subscribeNext:^(id x) {
+            RACTupleUnpack(NSString* key,NSString* value) = x;
+            NSLog(@"key %@ :  value %@",key, value);
+        }];
+    }];
+    
+    NSArray* arr = [[dictArr.rac_sequence map:^id(id value) {
+        return [KFC kfcWithDict:value];
+    }] array];
+    NSLog(@"%@",arr);
+}
+
+- (void)RACArrayTest{
+    NSString* fileP = [[NSBundle mainBundle] pathForResource:@"kfc.plist" ofType:@""];
+    NSArray* dictArr = [NSArray arrayWithContentsOfFile:fileP];
+    NSLog(@"dictArr = %@",dictArr);
+    
+    RACTuple* tuple = [RACTuple tupleWithObjectsFromArray:dictArr];
+    
+    for (int i = 0; i < tuple.count; ++i) {
+        NSDictionary* dict = tuple[i];
+        NSLog(@"%@",dict);
+    }
+    
 }
 
 - (void)constuctHKView{
@@ -37,6 +90,8 @@
     self.hkView.backgroundColor = [UIColor greenColor];
     [self.view addSubview:self.hkView];
     __weak typeof(self)weakself = self;
+    
+    // 提前订阅好 这样代码就能全部放在一起，可读性更高，而且替换了代理，代码更易读
     [self.hkView.btnClickSignal subscribeNext:^(id x) {
         weakself.view.backgroundColor = (UIColor*)x;
     }];
