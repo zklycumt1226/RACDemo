@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RACDemo_2/ViewController.m"
-            timestampString = "555819802.343734"
+            timestampString = "555849578.8823709"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
-            landmarkName = "-disposableTestFirst"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
+            landmarkName = "-constuctHKView"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RACDemo_2/ViewController.m"
-            timestampString = "555819802.344038"
+            timestampString = "555849578.882728"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "155"
-            endingLineNumber = "155"
-            landmarkName = "-disposableTestFirst"
+            startingLineNumber = "284"
+            endingLineNumber = "284"
+            landmarkName = "-RACArrayTest"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,12 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RACDemo_2/ViewController.m"
-            timestampString = "555819802.344231"
+            timestampString = "555849578.882955"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "166"
-            endingLineNumber = "166"
-            landmarkName = "-disposableTestFirst"
+            startingLineNumber = "295"
+            endingLineNumber = "295"
+            landmarkName = "-constuctHKView"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

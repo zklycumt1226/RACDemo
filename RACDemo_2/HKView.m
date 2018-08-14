@@ -34,6 +34,9 @@
 - (void)BtnClick:(UIButton*)btn{
     // 用来替换代理 
     [self.btnClickSignal sendNext:[UIColor blueColor]];
+    
 }
+
+
 
 @end

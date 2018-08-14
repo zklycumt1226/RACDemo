@@ -16,6 +16,7 @@
 		39F0EE21211BFE140004799C /* HKView.m in Sources */ = {isa = PBXBuildFile; fileRef = 39F0EE20211BFE140004799C /* HKView.m */; };
 		39F0EE2321211C3D0004799C /* kfc.plist in Resources */ = {isa = PBXBuildFile; fileRef = 39F0EE2221211C3D0004799C /* kfc.plist */; };
 		39F0EE2621211C560004799C /* KFC.m in Sources */ = {isa = PBXBuildFile; fileRef = 39F0EE2521211C560004799C /* KFC.m */; };
+		39F0EE2921216EE30004799C /* BlueView.m in Sources */ = {isa = PBXBuildFile; fileRef = 39F0EE2821216EE30004799C /* BlueView.m */; };
 		BDA2EA2EEC6BF1C7C1A0ABCE /* libPods-RACDemo_2.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D0C3FA34628AD7244C2577E6 /* libPods-RACDemo_2.a */; };
 /* End PBXBuildFile section */
 
@@ -36,6 +37,8 @@
 		39F0EE2221211C3D0004799C /* kfc.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = kfc.plist; sourceTree = "<group>"; };
 		39F0EE2421211C560004799C /* KFC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KFC.h; sourceTree = "<group>"; };
 		39F0EE2521211C560004799C /* KFC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KFC.m; sourceTree = "<group>"; };
+		39F0EE2721216EE30004799C /* BlueView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlueView.h; sourceTree = "<group>"; };
+		39F0EE2821216EE30004799C /* BlueView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlueView.m; sourceTree = "<group>"; };
 		D0C3FA34628AD7244C2577E6 /* libPods-RACDemo_2.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-RACDemo_2.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D67CCA29E23B8A9584E8630A /* Pods-RACDemo_2.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RACDemo_2.release.xcconfig"; path = "Pods/Target Support Files/Pods-RACDemo_2/Pods-RACDemo_2.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -81,6 +84,8 @@
 				39F0EE20211BFE140004799C /* HKView.m */,
 				39F0EE2421211C560004799C /* KFC.h */,
 				39F0EE2521211C560004799C /* KFC.m */,
+				39F0EE2721216EE30004799C /* BlueView.h */,
+				39F0EE2821216EE30004799C /* BlueView.m */,
 				39F0EE2221211C3D0004799C /* kfc.plist */,
 				39E834C92119B84B00FEE037 /* Main.storyboard */,
 				39E834CC2119B84C00FEE037 /* Assets.xcassets */,
@@ -203,6 +208,7 @@
 			files = (
 				39E834C82119B84B00FEE037 /* ViewController.m in Sources */,
 				39F0EE21211BFE140004799C /* HKView.m in Sources */,
+				39F0EE2921216EE30004799C /* BlueView.m in Sources */,
 				39F0EE2621211C560004799C /* KFC.m in Sources */,
 				39E834D32119B84C00FEE037 /* main.m in Sources */,
 				39E834C52119B84B00FEE037 /* AppDelegate.m in Sources */,
