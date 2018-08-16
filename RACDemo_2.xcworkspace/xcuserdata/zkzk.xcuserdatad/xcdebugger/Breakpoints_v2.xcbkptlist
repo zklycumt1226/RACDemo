@@ -10,12 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RACDemo_2/ViewController.m"
-            timestampString = "555849578.8823709"
+            timestampString = "556026977.809877"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "290"
-            endingLineNumber = "290"
-            landmarkName = "-constuctHKView"
+            startingLineNumber = "442"
+            endingLineNumber = "442"
+            landmarkName = "-RACArrayTest2"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,12 +26,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RACDemo_2/ViewController.m"
-            timestampString = "555849578.882728"
+            timestampString = "556026977.8102"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "284"
-            endingLineNumber = "284"
-            landmarkName = "-RACArrayTest"
+            startingLineNumber = "436"
+            endingLineNumber = "436"
+            landmarkName = "-RACArrayTest2"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -42,12 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RACDemo_2/ViewController.m"
-            timestampString = "555849578.882955"
+            timestampString = "556026977.81041"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "295"
-            endingLineNumber = "295"
-            landmarkName = "-constuctHKView"
+            startingLineNumber = "447"
+            endingLineNumber = "447"
+            landmarkName = "-RACArrayTest2"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

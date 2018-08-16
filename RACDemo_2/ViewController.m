@@ -41,14 +41,204 @@
     
     //[self RACArrayTest2];
 //    [self BlueButtonClick];
-//
+
 //    [self RACTimer];
     
     //[self ARC_hong];
     //[self subscribTheSameSignalManyTime];
     
-    [self RACCommand];
+    //[self RACCommand];
+    //[self RAC_MAP_DEMO];
+    
+    //[self concatzuhe];
+    //[self thenZuhe];
+    
+    //[self mergeZuhe];
+    //[self zipZuhe];
 }
+
+// 组合对应的应用
+- (void)zuheyingyong{
+    
+}
+
+- (void)zipZuhe{
+    RACSubject* subjectA = [RACSubject subject];
+    RACSubject* subjectB = [RACSubject subject];
+    
+    // 使用信号压缩组合，将两个信号压缩成一个信号。并且只有两个信号都发送一次数据才会执行组合后信号对应的订阅
+    // 信号接收顺序和发送数据顺序无关，只和订阅顺序有关
+    RACSignal* zipSignal = [subjectA zipWith:subjectB];
+    [zipSignal subscribeNext:^(id x) {
+        NSLog(@"收到数据 = %@",x);
+    }];
+    
+    // 注意 只有发送一次A 同时发送一次B 才会调用zipSignal的订阅信息
+    [subjectA sendNext:@"组合数据A"];
+    [subjectB sendNext:@"组合数据B"];
+    
+    [subjectA sendNext:@"组合数据A"];
+    [subjectB sendNext:@"组合数据B"];
+    
+    [subjectA sendNext:@"组合数据A"];
+    [subjectB sendNext:@"组合数据B"];
+}
+
+- (void)mergeZuhe{
+    
+    // merge 组合 处理数据的顺序和组合信号的顺序没有关系，那个信号的数据先发送，就先出里那个
+    RACSubject* signalA = [RACSubject subject];
+    RACSubject* signalB = [RACSubject subject];
+    RACSubject* signalC = [RACSubject subject];
+    
+    RACSignal* mergeSignal = [RACSignal merge:@[signalA,signalB,signalC]];
+    [mergeSignal subscribeNext:^(id x) {
+        NSLog(@"收到信号%@",x);
+    }];
+    
+    [signalB sendNext:@"B数据"];
+    [signalA sendNext:@"A数据"];
+    [signalC sendNext:@"C数据"];
+}
+
+- (void)thenZuhe{
+    RACSignal* signalA= [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSLog(@"信号A");
+        
+        [subscriber sendNext:@"发送数据A"];
+        
+        // 注意需要调用发送完成的方法
+        [subscriber sendCompleted];
+        return nil;
+    }];
+    
+    RACSignal* signalB = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSLog(@"信号B");
+        [subscriber sendNext:@"发送数据B"];
+        return nil;
+    }];
+    
+   RACSignal* thenSignal = [signalA then:^RACSignal *{
+        return signalB;
+    }];
+    
+    // then 组合的目的就是忽略信号A的数据 使用信号B的数据，不过必须在信号A发送完成之后 才能走到信号B ，所以信号A必须调用sendCompleted
+    [thenSignal subscribeNext:^(id x) {
+        NSLog(@"收到数据 %@",x);
+    }];
+}
+
+// 组合
+- (void)concatzuhe{
+    
+    RACSignal* signalA = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSLog(@"A信号");
+        [subscriber sendNext:@"发送信号A"];
+        // 所以A信号发送结束后，需要调用 完成方法
+        // 代表发送结束，这样才会调用信号B 发送的方法
+        [subscriber sendCompleted];
+        
+        // 如果调用sendError方法 那不会调用信号B的发送
+        //[subscriber sendError:nil];
+        return nil;
+    }];
+    
+    RACSignal* signalB = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSLog(@"B信号");
+        [subscriber sendNext:@"发送信号B"];
+        return nil;
+    }];
+    
+    // 将A信号 和B 信号组合，这样只有当A信号成功发送结束后，才能发送B信号
+   RACSignal* signalConcat = [signalA concat:signalB];
+    
+    [signalConcat subscribeNext:^(id x) {
+        NSLog(@"谁的信号= %@",x);
+    }];
+    
+    // 当有7、8个信号时，刚刚的方式就比较麻烦了。  如果有方法能够直接添加数组就好了
+    //[RACSignal concat:@[signalC,signalD,signalE]]; 这种方式正好解决。
+    RACSignal* signalC = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSLog(@"C信号");
+        [subscriber sendNext:@"发送信号C"];
+        [subscriber sendCompleted];
+        return nil;
+    }];
+    
+    RACSignal* signalD = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSLog(@"D信号");
+        [subscriber sendNext:@"发送信号D"];
+        [subscriber sendCompleted];
+        return nil;
+    }];
+    
+    RACSignal* signalE = [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+        NSLog(@"E信号");
+        [subscriber sendNext:@"发送信号E"];
+        return nil;
+    }];
+    
+   RACSignal* signal = [RACSignal concat:@[signalC,signalD,signalE]];
+    [signal subscribeNext:^(id x) {
+        NSLog( @"谁的信号 ----- %@",x);
+    }];
+}
+
+
+- (void)RAC_MAP_DEMO{
+    // 1、正常流程
+    RACSubject* subject = [RACSubject subject];
+
+    [subject subscribeNext:^(id x) {
+        NSLog(@"收到信号 --- %@",x);
+    }];
+
+    [subject sendNext:@"123"];
+
+    RACSubject* subject2 = [RACSubject subject];
+    
+    // 2、map返回一个信号，map内部对初次发送过来的信号进行处理。
+    // 下面这段代码就是映射
+    [[subject2 map:^id(id value) {
+        //返回一个id类型的对象
+        return [NSString stringWithFormat:@"处理后的数据 %@",value];
+    }] subscribeNext:^(id x) {
+        //通过上面对接受到的数据进行处理，处理完成后再通过订阅使用处理完成之后的数据。
+        NSLog(@"接收处理之后的数据 ---- %@",x);
+    }];
+    
+    [subject2 sendNext:@"345"];
+    
+    // 3、a信号中发送一个信号
+    RACSubject* signalOfSignal = [RACSubject subject];
+    RACSubject* signal = [RACSubject subject];
+    
+    [signalOfSignal subscribeNext:^(RACSignal* x) {
+        
+        [x subscribeNext:^(id x) {
+            NSLog(@"x is %@",x); //输出x是123
+        }];
+        
+    }];
+    
+    //b 或则通过属性切换到最新的
+    [signalOfSignal.switchToLatest subscribeNext:^(id x) {
+        NSLog(@"x is %@",x); //输出x是123
+    }];
+    
+    // c 使用flattenMap 处理信号中的信号
+    // 或者通过一个新的方式 flattenMap  value是一个信号，flattenMap需要返回一个信号，所以有下面的代码
+    [[signalOfSignal flattenMap:^RACStream *(id value) {
+        return value;
+    }] subscribeNext:^(id x) {
+        NSLog(@"x is %@",x); //输出x是123
+    }] ;
+    
+    [signalOfSignal sendNext:signal];
+    [signal sendNext:@"123"];
+}
+
+//映射
 
 //bind
 - (void)BindFunc{
