@@ -55,11 +55,123 @@
     
     //[self mergeZuhe];
     //[self zipZuhe];
+    //[self filterGuolv];
+    //[self ignoreGuoLv];
+    //[self takeGuolV];
+   // [self takeLastGuolV];
+    //[self takeUntileGuolV];
+    //[self distinGuolV];
+    
+    [self skipGuoLv];
 }
 
-// 组合对应的应用
-- (void)zuheyingyong{
+// 跳过前几个信号
+- (void)skipGuoLv{
+    RACSubject* subject = [RACSubject subject];
     
+    // skip 跳过前面2个信号 接受后面的信号
+    [[subject skip:2] subscribeNext:^(id x) {
+        NSLog(@"%@",x);
+    }];
+    
+    [subject sendNext:@"1"];// 数据被忽略
+    [subject sendNext:@"2"];// 数据被忽略
+    [subject sendNext:@"3"];// 数据被拿到
+}
+
+// 忽略重复信号
+- (void)distinGuolV{
+    
+    RACSubject* subject = [RACSubject subject];
+    
+    // 忽略重复数据 当收到的数据是重复数据时，就会忽略后来收到的
+    [[subject distinctUntilChanged] subscribeNext:^(id x) {
+        NSLog(@"接收到信号 = %@",x);
+    }];
+    
+    [subject sendNext:@"1"];// 数据被拿到
+    [subject sendNext:@"1"];// 数据被忽略
+    
+    [subject sendNext:@"2"];// 数据被拿到
+    [subject sendNext:@"2"];// 数据被忽略
+}
+
+- (void)takeUntileGuolV{
+    
+    RACSubject* subject = [RACSubject subject];
+    RACSubject* signal = [RACSubject subject];
+    
+    // takeUntil 调用后，如果subject 有发送多个信号，只会调用到在signal之前的所有信号
+    [[subject takeUntil:signal] subscribeNext:^(id x) {
+        NSLog(@"%@",x);
+    }];
+    
+    [subject sendNext:@"1"];// 数据被拿到
+    [subject sendNext:@"3"];// 数据被拿到
+    
+    [signal sendNext:@"-----标记"];// 这是标记，调用标记的signal后 后面的信号就不会被处理
+    //[signal sendCompleted]; // 和发送信号有同样的功效 后面的方法也就不会被处理
+    [subject sendNext:@"2"];//数据被忽略
+    [subject sendCompleted];
+}
+
+- (void)takeLastGuolV{
+    
+    RACSubject* subject = [RACSubject subject];
+    // 指定从后往前拿去几条数据 注意信号发送完成后必须执行sendCompleted方法
+    [[subject takeLast:2] subscribeNext:^(id x) {
+        NSLog(@"接受到数据 = %@",x);
+    }];
+    
+    [subject sendNext:@"1"];// 数据被忽略
+    [subject sendNext:@"3"];// 数据被拿到
+    [subject sendNext:@"2"];// 数据被拿到
+    [subject sendCompleted];
+}
+
+- (void)takeGuolV{
+    
+    RACSubject* subject = [RACSubject subject];
+    // 指定从前面拿几条数据
+    [[subject take:2] subscribeNext:^(id x) {
+        NSLog(@"接受到数据 = %@",x);
+    }];
+    
+    [subject sendNext:@"1"];// 数据被拿到
+    [subject sendNext:@"3"];// 数据被拿到
+    [subject sendNext:@"2"];// 数据被忽略
+    
+}
+
+// 忽略
+- (void)ignoreGuoLv{
+    RACSubject* subject = [RACSubject subject];
+    
+    // 可以使用ignore 连续忽略多个信号的值，只针对值进行忽略
+    RACSignal* ignoreSignal = [[[subject ignore:@"1"] ignore:@"3"] ignore:@"18"];
+    [ignoreSignal subscribeNext:^(id x) {
+        NSLog(@"收到信号 ---- %@",x);
+    }];
+    
+    [subject sendNext:@"1"];// 信号被忽略
+    [subject sendNext:@"3"];// 信号被忽略
+    [subject sendNext:@"18"];// 信号被忽略
+    [subject sendNext:@"12"];// 该信号会被处理
+}
+
+// 过滤
+- (void)filterGuolv{
+    // 1、filter 返回一个信号， 之后直接订阅该信号。
+    [[_textField.rac_textSignal filter:^BOOL(id value) {
+        //2、value 为_textField.rac_textSignal信号对应传递的值
+        //3、block内部有返回值，当返回值为NO，filter返回的信号就不能被订阅，这样4中的代码就不能被执行
+        // 只有返回YES 时，才会执行4 中的代码
+        // 这样就可以对value进行过滤 达到某个条件时才执行4中的代码。
+        return [value length] > 4;
+    }] subscribeNext:^(id x) {
+        //4
+        NSLog(@"x is  = %@",x);
+    }] ;
 }
 
 - (void)zipZuhe{
@@ -250,6 +362,72 @@
         };
        
     }];
+}
+
+// 监控命令是否正在执行
+- (void)RACCommandExecuting{
+    RACCommand* command = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+        NSLog(@"%@",input);// 这里就是输入的指令
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [subscriber sendNext:@"执行完命令后产生的数据"];
+            [subscriber sendCompleted];// 需要调用发送结束的方法 才能在调用结束后执行executing中结束的方法（命令已经结束）
+            return nil;
+        }];
+    }];
+    
+    [command.executing subscribeNext:^(id x) {
+        if ([x boolValue]) {
+            NSLog(@"命令正在执行");
+        } else {
+            NSLog(@"命令已经结束&&或者还没有开始");
+        }
+    }];
+    RACSignal* signal = [command execute:@"输入指令"];
+    [signal subscribeNext:^(id x) {
+        NSLog(@"%@",x);// 这里是执行完命令后产生的数据
+    }];
+}
+
+// RACCommand信号源 switch
+- (void)RACCommandExecutionSignalSwitchSignal{
+    RACCommand* command = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [subscriber sendNext:@"执行完命令后产生的数据"];
+            return nil;
+        }];
+    }];
+    
+    //executionSignals 信号源，即信号中的信号 而不用调用execute 返回信号后才订阅
+    // 根据上面的代码可知，x是一个信号(打印一下也知道),可以直接订阅
+    //switchToLatest 代表信号源中 最新的信号
+    [command.executionSignals.switchToLatest subscribeNext:^(id x) {
+        NSLog(@"%@",x);// 拿到的X 是执行命令之后产生的数据
+    }];
+    
+    // 执行命令
+    [command execute:@"执行---"];
+}
+
+
+// RACCommand信号源
+- (void)RACCommandExecutionSignal{
+    RACCommand* command = [[RACCommand alloc] initWithSignalBlock:^RACSignal *(id input) {
+        return [RACSignal createSignal:^RACDisposable *(id<RACSubscriber> subscriber) {
+            [subscriber sendNext:@"执行完命令后产生的数据"];
+            return nil;
+        }];
+    }];
+    
+    //executionSignals 信号源，即信号中的信号 而不用调用execute 返回信号后才订阅
+    // 根据上面的代码可知，x是一个信号(打印一下也知道),可以直接订阅
+    [command.executionSignals subscribeNext:^(RACSignal* x) {
+        [x subscribeNext:^(id x) {
+            NSLog(@"接受到的信号 ---- %@",x);
+        }];
+    }];
+    
+    // 执行命令
+    [command execute:@"执行---"];
 }
 
 - (void)RACCommand{

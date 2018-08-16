@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RACDemo_2/ViewController.m"
-            timestampString = "556026977.809877"
+            timestampString = "556110873.84431"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "442"
-            endingLineNumber = "442"
+            startingLineNumber = "620"
+            endingLineNumber = "620"
             landmarkName = "-RACArrayTest2"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RACDemo_2/ViewController.m"
-            timestampString = "556026977.8102"
+            timestampString = "556110873.844884"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "436"
-            endingLineNumber = "436"
+            startingLineNumber = "614"
+            endingLineNumber = "614"
             landmarkName = "-RACArrayTest2"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "RACDemo_2/ViewController.m"
-            timestampString = "556026977.81041"
+            timestampString = "556110873.845551"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "447"
-            endingLineNumber = "447"
+            startingLineNumber = "625"
+            endingLineNumber = "625"
             landmarkName = "-RACArrayTest2"
             landmarkType = "7">
          </BreakpointContent>
